@@ -52,3 +52,9 @@ section[id] {
     background-color: #ffffff;
     display: grid;
 }
+.contact-from {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    display: grid;
+}
