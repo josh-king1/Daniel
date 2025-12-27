@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Auth</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            background: #fff;
+        }
+        .nav-pills .nav-link {
+            color: #6c757d;
+            font-weight: 600;
+            border-radius: 10px;
+            margin: 0 5px;
+        }
+        .nav-pills .nav-link.active, .btn-primary {
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
+        }
+        .form-label { font-weight: 500; font-size: 0.9rem; }
+        .form-control, .form-select {
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+        #response-message { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="card auth-card p-4">
+    <div id="response-message" class="alert alert-success text-center mb-3" role="alert"></div>
+
+    <ul class="nav nav-pills nav-justified mb-4" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" id="tab-login" data-bs-toggle="pill" data-bs-target="#pills-login" type="button">Login</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="tab-signup" data-bs-toggle="pill" data-bs-target="#pills-signup" type="button">Register</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="pills-login">
+            <h4 class="text-center mb-4 fw-bold text-primary">Student Login</h4>
+            <form id="loginForm" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label class="form-label">Student ID (E11...)</label>
+                    <input type="text" class="form-control" id="loginId" placeholder="E11XXXX" required pattern="^E11.*$">
+                    <div class="invalid-feedback">Valid Student ID starting with E11 is required.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" required>
+                </div>
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary py-2 fw-bold">Login to Portal</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="pills-signup">
+            <h4 class="text-center mb-4 fw-bold text-primary">New Registration</h4>
+            <form id="signupForm" class="needs-validation" novalidate>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Student ID</label>
+                        <input type="text" class="form-control" placeholder="E11XXXX" required pattern="^E11.*$">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Matric No.</label>
+                        <input type="text" class="form-control" placeholder="FPS/CSC/XX/XXXXX" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Current Level</label>
+                    <select class="form-select" required>
+                        <option value="" selected disabled>Choose level...</option>
+                        <option value="100">100 Level</option>
+                        <option value="200">200 Level</option>
+                        <option value="300">300 Level</option>
+                        <option value="400">400 Level</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="regPass" required minlength="6">
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary py-2 fw-bold">Complete Registration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const forms = document.querySelectorAll('.needs-validation');
+    const alertBox = document.getElementById('response-message');
+
+    forms.forEach(form => {
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+            } else {
+                simulateResponse(form.id);
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+
+    function simulateResponse(formId) {
+        const btn = document.querySelector(`#${formId} button`);
+        const originalText = btn.innerText;
+        
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Verifying...`;
+
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.innerText = originalText;
+            
+            alertBox.style.display = 'block';
+            alertBox.innerText = formId === 'loginForm' ? "Access Granted! Welcome." : "Registration Successful!";
+            
+            if(formId === 'signupForm') {
+                const loginTab = new bootstrap.Tab(document.getElementById('tab-login'));
+                setTimeout(() => loginTab.show(), 1000);
+            }
+        }, 1500);
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

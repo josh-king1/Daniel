@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 400px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .nav-pills .nav-link {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        .nav-pills .nav-link.active, .btn-primary {
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        /* Hidden by default, shown after "submission" */
+        #response-message { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="card auth-card p-4">
+    <div id="response-message" class="alert alert-success mt-2 mb-4 text-center" role="alert">
+        Success! Redirecting...
+    </div>
+
+    <ul class="nav nav-pills nav-justified mb-4" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab">Login</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-signup-tab" data-bs-toggle="pill" data-bs-target="#pills-signup" type="button" role="tab">Sign Up</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-login" role="tabpanel">
+            <h3 class="text-center mb-4 fw-bolder text-primary">Welcome Back</h3>
+            <form id="loginForm" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com" required>
+                    <div class="invalid-feedback">Please enter a valid email.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="loginPass" placeholder="Enter password" required minlength="6">
+                    <div class="invalid-feedback">Password must be at least 6 characters.</div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary py-2" id="loginBtn">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span class="btn-text">Login</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="pills-signup" role="tabpanel">
+            <h3 class="text-center mb-4 fw-bolder text-primary">Create Account</h3>
+            <form id="signupForm" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" placeholder="John Doe" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <input type="email" class="form-control" placeholder="name@example.com" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" placeholder="Create password" required minlength="8">
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary py-2" id="signupBtn">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span class="btn-text">Get Started</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handle Form Submissions
+    const forms = [document.getElementById('loginForm'), document.getElementById('signupForm')];
+    const alertBox = document.getElementById('response-message');
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function (event) {
+            // Prevent default browser submission
+            event.preventDefault();
+            
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+            } else {
+                handleAuth(form);
+            }
+        }, false);
+    });
+
+    function handleAuth(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        const spinner = btn.querySelector('.spinner-border');
+        const btnText = btn.querySelector('.btn-text');
+
+        // 1. Show Loading State
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        btnText.innerText = 'Processing...';
+
+        // 2. Simulate an API Call (Mockup)
+        setTimeout(() => {
+            // Hide loading
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            btnText.innerText = form.id === 'loginForm' ? 'Login' : 'Get Started';
+
+            // Show Success Message
+            alertBox.style.display = 'block';
+            alertBox.innerText = form.id === 'loginForm' ? "Login Successful!" : "Account Created Successfully!";
+            
+            // Clear form
+            form.reset();
+            form.classList.remove('was-validated');
+
+            // Hide alert after 3 seconds
+            setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+            
+        }, 1500); // 1.5 second delay
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
